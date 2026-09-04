@@ -68,6 +68,9 @@ export default function MainLayout({
                     소개
                   </Link>
                 )}
+                <Link href="/login" className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                  관리
+                </Link>
                 <button
                   onClick={toggleTheme}
                   className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"

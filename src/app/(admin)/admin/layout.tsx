@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/stores/auth-store';
 import { useTheme } from '@/stores/theme-store';
@@ -14,20 +14,29 @@ export default function AdminLayout({
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !user) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [mounted, user, router]);
 
   const handleLogout = () => {
     logout();
     router.push('/login');
   };
 
-  if (!user) {
-    return null;
+  if (!mounted || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-gray-500 dark:text-gray-400">로딩 중...</div>
+      </div>
+    );
   }
 
   return (
@@ -36,9 +45,9 @@ export default function AdminLayout({
         {/* Sidebar */}
         <aside className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">
               블로그 관리
-            </h2>
+            </Link>
           </div>
           
           <nav className="p-4 space-y-2">
@@ -76,7 +85,7 @@ export default function AdminLayout({
 
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-600 dark:text-gray-400">
+              <span className="text-sm text-gray-600 dark:text-gray-400 truncate">
                 {user.email}
               </span>
               <button
