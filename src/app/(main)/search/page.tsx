@@ -93,7 +93,7 @@ export default function SearchPage() {
                           </span>
                         ))}
                       </div>
-                    }
+                    )}
                   </div>
                 </article>
               ))}
