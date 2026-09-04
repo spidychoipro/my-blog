@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/stores/auth-store';
 import { useTheme } from '@/stores/theme-store';
@@ -14,13 +15,18 @@ export default function AdminLayout({
   const { isDark, toggleTheme } = useTheme();
   const router = useRouter();
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   const handleLogout = () => {
     logout();
     router.push('/login');
   };
 
   if (!user) {
-    router.push('/login');
     return null;
   }
 
