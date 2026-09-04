@@ -73,7 +73,7 @@ export default function SearchPage() {
                   key={post.id}
                   className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-md transition-shadow"
                 >
-                  <Link href={`/posts/${post.slug}`}>
+                  <Link href={`/post?slug=${post.slug}`}>
                     <h2 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400">
                       {post.title}
                     </h2>

@@ -1,20 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase, type Post, type Category } from '@/lib/supabase';
 
-export default function CategoryPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  
+function CategoryContent() {
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('slug');
+
   const [category, setCategory] = useState<Category | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategory();
+    if (slug) fetchCategory();
   }, [slug]);
 
   const fetchCategory = async () => {
@@ -24,7 +24,7 @@ export default function CategoryPage() {
         .select('*')
         .eq('slug', slug)
         .limit(1);
-      
+
       if (!categories || categories.length === 0) {
         setLoading(false);
         return;
@@ -96,7 +96,7 @@ export default function CategoryPage() {
               key={post.id}
               className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-md transition-shadow"
             >
-              <Link href={`/posts/${post.slug}`}>
+              <Link href={`/post?slug=${post.slug}`}>
                 <h2 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400">
                   {post.title}
                 </h2>
@@ -123,5 +123,13 @@ export default function CategoryPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CategoryPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="text-gray-500 dark:text-gray-400">로딩 중...</div></div>}>
+      <CategoryContent />
+    </Suspense>
   );
 }

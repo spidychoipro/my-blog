@@ -59,7 +59,7 @@ export default function HomePage() {
             {categories.map((category) => (
               <Link
                 key={category.id}
-                href={`/categories/${category.slug}`}
+                href={`/category?slug=${category.slug}`}
                 className="px-4 py-2 rounded-full text-sm font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
                 style={{ borderColor: category.color || undefined }}
               >
@@ -83,7 +83,7 @@ export default function HomePage() {
                 key={post.id}
                 className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-md transition-shadow"
               >
-                <Link href={`/posts/${post.slug}`}>
+                <Link href={`/post?slug=${post.slug}`}>
                   <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400">
                     {post.title}
                   </h3>

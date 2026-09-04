@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase, type Post, type Category, type Comment } from '@/lib/supabase';
 
-export default function PostPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  
+function PostContent() {
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('slug');
+
   const [post, setPost] = useState<Post | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -22,7 +22,7 @@ export default function PostPage() {
   const [submitMessage, setSubmitMessage] = useState('');
 
   useEffect(() => {
-    fetchPost();
+    if (slug) fetchPost();
   }, [slug]);
 
   const fetchPost = async () => {
@@ -33,7 +33,7 @@ export default function PostPage() {
         .eq('slug', slug)
         .eq('status', 'published')
         .limit(1);
-      
+
       if (!posts || posts.length === 0) {
         setLoading(false);
         return;
@@ -114,7 +114,7 @@ export default function PostPage() {
         <div className="flex items-center text-gray-500 dark:text-gray-400 space-x-4">
           {category && (
             <Link
-              href={`/categories/${category.slug}`}
+              href={`/category?slug=${category.slug}`}
               className="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               {category.name}
@@ -231,5 +231,13 @@ export default function PostPage() {
         )}
       </section>
     </article>
+  );
+}
+
+export default function PostPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="text-gray-500 dark:text-gray-400">로딩 중...</div></div>}>
+      <PostContent />
+    </Suspense>
   );
 }
