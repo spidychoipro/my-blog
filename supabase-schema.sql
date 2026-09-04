@@ -10,7 +10,17 @@ CREATE TABLE profiles (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 2. posts 테이블 (블로그 글)
+-- 2. categories 테이블 (카테고리) - posts보다 먼저 생성
+CREATE TABLE categories (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  description TEXT,
+  color TEXT DEFAULT '#3b82f6',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 3. posts 테이블 (블로그 글)
 CREATE TABLE posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -24,16 +34,6 @@ CREATE TABLE posts (
   tags TEXT[] DEFAULT '{}',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 3. categories 테이블 (카테고리)
-CREATE TABLE categories (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  slug TEXT UNIQUE NOT NULL,
-  description TEXT,
-  color TEXT DEFAULT '#3b82f6',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 4. comments 테이블 (댓글)
