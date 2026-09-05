@@ -68,23 +68,23 @@ export default function CommentsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <div className="flex items-center justify-between mb-6 lg:mb-8">
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
           댓글 관리
           {pendingCount > 0 && (
-            <span className="ml-3 text-sm bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-1 rounded-full">
-              {pendingCount}개 대기 중
+            <span className="ml-2 lg:ml-3 text-xs lg:text-sm bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-1 rounded-full">
+              {pendingCount}개 대기
             </span>
           )}
         </h1>
       </div>
 
-      <div className="flex space-x-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6">
         {(['all', 'pending', 'approved', 'rejected'] as const).map((status) => (
           <button
             key={status}
             onClick={() => setFilter(status)}
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
+            className={`px-3 lg:px-4 py-2 rounded-md text-sm font-medium ${
               filter === status
                 ? 'bg-blue-600 text-white'
                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'

@@ -68,4 +68,17 @@ export type BlogSettings = {
   about_text?: string;
   hero_text?: string;
   custom_css?: string;
+  font_family?: string;
+  hero_image?: string;
+  accent_color?: string;
+  text_color?: string;
+  background_color?: string;
+  card_background?: string;
+  border_radius?: string;
+  show_profile_in_header?: boolean;
+  show_tags?: boolean;
+  show_category_badge?: boolean;
+  post_card_style?: 'default' | 'boxed' | 'minimal';
+  hero_style?: 'centered' | 'left' | 'banner';
+  enable_scroll_top?: boolean;
 };

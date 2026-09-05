@@ -22,6 +22,19 @@ const defaultSettings: Partial<BlogSettings> = {
   about_text: '',
   hero_text: '',
   custom_css: '',
+  hero_image: '',
+  accent_color: '#f59e0b',
+  text_color: '#1f2937',
+  background_color: '#f9fafb',
+  card_background: '#ffffff',
+  border_radius: '0.5rem',
+  font_family: 'system-ui, sans-serif',
+  show_profile_in_header: true,
+  show_tags: true,
+  show_category_badge: true,
+  post_card_style: 'default',
+  hero_style: 'centered',
+  enable_scroll_top: true,
 };
 
 export default function SettingsPage() {
@@ -29,7 +42,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<BlogSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'basic' | 'design' | 'social' | 'advanced'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'design' | 'layout' | 'social' | 'advanced'>('basic');
 
   useEffect(() => {
     if (user) {
@@ -88,25 +101,26 @@ export default function SettingsPage() {
   const tabs = [
     { id: 'basic' as const, label: '기본 정보' },
     { id: 'design' as const, label: '디자인' },
+    { id: 'layout' as const, label: '레이아웃' },
     { id: 'social' as const, label: '소셜 미디어' },
     { id: 'advanced' as const, label: '고급 설정' },
   ];
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+      <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-6 lg:mb-8">
         블로그 설정
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Tabs */}
-        <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+        <div className="flex flex-wrap gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              className={`flex-1 min-w-[80px] py-2 px-3 lg:px-4 rounded-md text-xs lg:text-sm font-medium transition-colors ${
                 activeTab === tab.id
                   ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
@@ -287,6 +301,154 @@ export default function SettingsPage() {
             </label>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                폰트 설정
+              </label>
+              <select
+                value={settings.font_family || 'system-ui, sans-serif'}
+                onChange={(e) => setSettings({ ...settings, font_family: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="system-ui, sans-serif">기본 (System)</option>
+                <option value="'Noto Sans KR', sans-serif">Noto Sans KR</option>
+                <option value="'Pretendard', sans-serif">Pretendard</option>
+                <option value="'Gowun Dodum', sans-serif">고운 돋움</option>
+                <option value="'Nanum Gothic', sans-serif">나눔 고딕</option>
+                <option value="'Nanum Myeongjo', serif">나눔 명조</option>
+                <option value="'Gowun Batang', serif">고운 바탕</option>
+                <option value="Georgia, serif">Georgia (영문)</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                히어로 이미지 URL (홈 상단 배경)
+              </label>
+              <input
+                type="url"
+                value={settings.hero_image || ''}
+                onChange={(e) => setSettings({ ...settings, hero_image: e.target.value })}
+                placeholder="https://example.com/hero.jpg"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  강조 색상
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={settings.accent_color || '#f59e0b'}
+                    onChange={(e) => setSettings({ ...settings, accent_color: e.target.value })}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.accent_color || '#f59e0b'}
+                    onChange={(e) => setSettings({ ...settings, accent_color: e.target.value })}
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  텍스트 색상
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={settings.text_color || '#1f2937'}
+                    onChange={(e) => setSettings({ ...settings, text_color: e.target.value })}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.text_color || '#1f2937'}
+                    onChange={(e) => setSettings({ ...settings, text_color: e.target.value })}
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  배경 색상
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={settings.background_color || '#f9fafb'}
+                    onChange={(e) => setSettings({ ...settings, background_color: e.target.value })}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.background_color || '#f9fafb'}
+                    onChange={(e) => setSettings({ ...settings, background_color: e.target.value })}
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  카드 배경 색상
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={settings.card_background || '#ffffff'}
+                    onChange={(e) => setSettings({ ...settings, card_background: e.target.value })}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.card_background || '#ffffff'}
+                    onChange={(e) => setSettings({ ...settings, card_background: e.target.value })}
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                테두리 반경 (모서리 둥글기)
+              </label>
+              <select
+                value={settings.border_radius || '0.5rem'}
+                onChange={(e) => setSettings({ ...settings, border_radius: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="0">0 (각진)</option>
+                <option value="0.25rem">작게</option>
+                <option value="0.5rem">기본</option>
+                <option value="1rem">크게</option>
+                <option value="9999px">완전 둥글게</option>
+              </select>
+            </div>
+            <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">미리보기</p>
+              <div className="grid grid-cols-3 gap-2 p-3 rounded"
+                style={{ backgroundColor: settings.background_color || '#f9fafb' }}
+              >
+                <div className="h-12 rounded flex items-center justify-center text-xs font-medium"
+                  style={{ backgroundColor: settings.card_background || '#fff', color: settings.text_color || '#1f2937', borderRadius: settings.border_radius }}
+                >
+                  카드
+                </div>
+                <div className="h-12 rounded flex items-center justify-center text-xs font-medium text-white"
+                  style={{ backgroundColor: settings.primary_color, borderRadius: settings.border_radius }}
+                >
+                  메인
+                </div>
+                <div className="h-12 rounded flex items-center justify-center text-xs font-medium text-white"
+                  style={{ backgroundColor: settings.accent_color || '#f59e0b', borderRadius: settings.border_radius }}
+                >
+                  강조
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 커스텀 CSS
               </label>
               <textarea
@@ -297,6 +459,79 @@ export default function SettingsPage() {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
               />
             </div>
+          </div>
+        )}
+
+        {/* Layout Tab */}
+        {activeTab === 'layout' && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 lg:p-6 space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              레이아웃 설정
+            </h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                히어로 스타일
+              </label>
+              <select
+                value={settings.hero_style || 'centered'}
+                onChange={(e) => setSettings({ ...settings, hero_style: e.target.value as 'centered' | 'left' | 'banner' })}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="centered">가운데 정렬</option>
+                <option value="left">왼쪽 정렬</option>
+                <option value="banner">배너 (이미지 배경)</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                글 카드 스타일
+              </label>
+              <select
+                value={settings.post_card_style || 'default'}
+                onChange={(e) => setSettings({ ...settings, post_card_style: e.target.value as 'default' | 'boxed' | 'minimal' })}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="default">기본 (카드)</option>
+                <option value="boxed">박스형</option>
+                <option value="minimal">미니멀 (구분선)</option>
+              </select>
+            </div>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={settings.show_profile_in_header ?? true}
+                onChange={(e) => setSettings({ ...settings, show_profile_in_header: e.target.checked })}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-gray-700 dark:text-gray-300">헤더에 프로필 이미지 표시</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={settings.show_tags ?? true}
+                onChange={(e) => setSettings({ ...settings, show_tags: e.target.checked })}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-gray-700 dark:text-gray-300">글 카드에 태그 표시</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={settings.show_category_badge ?? true}
+                onChange={(e) => setSettings({ ...settings, show_category_badge: e.target.checked })}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-gray-700 dark:text-gray-300">글 카드에 카테고리 배지 표시</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={settings.enable_scroll_top ?? true}
+                onChange={(e) => setSettings({ ...settings, enable_scroll_top: e.target.checked })}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-gray-700 dark:text-gray-300">맨 위로 버튼 표시</span>
+            </label>
           </div>
         )}
 

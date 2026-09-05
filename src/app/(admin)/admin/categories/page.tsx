@@ -80,8 +80,8 @@ export default function CategoriesPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 lg:mb-8">
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
           카테고리 관리
         </h1>
         <button
@@ -92,17 +92,17 @@ export default function CategoriesPage() {
           }}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
-          새 카테고리
+          + 새 카테고리
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 lg:p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             {editingId ? '카테고리 수정' : '새 카테고리'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   이름 *
@@ -138,8 +138,8 @@ export default function CategoriesPage() {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <div className="flex items-center gap-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 색상
               </label>
               <input
@@ -178,65 +178,109 @@ export default function CategoriesPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  이름
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  슬러그
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  색상
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  관리
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {categories.map((category) => (
-                <tr key={category.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
-                      {category.name}
-                    </div>
-                    {category.description && (
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {category.description}
+        <>
+          {/* Desktop Table */}
+          <div className="hidden md:block bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    이름
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    슬러그
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    색상
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    관리
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {categories.map((category) => (
+                  <tr key={category.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        {category.name}
                       </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                    /{category.slug}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div 
-                      className="w-6 h-6 rounded"
+                      {category.description && (
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {category.description}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      /{category.slug}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div 
+                        className="w-6 h-6 rounded"
+                        style={{ backgroundColor: category.color || '#3b82f6' }}
+                      />
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm space-x-2">
+                      <button
+                        onClick={() => handleEdit(category)}
+                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={() => handleDelete(category.id)}
+                        className="text-red-600 dark:text-red-400 hover:underline"
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {categories.map((category) => (
+              <div key={category.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className="w-4 h-4 rounded-full shrink-0"
                       style={{ backgroundColor: category.color || '#3b82f6' }}
                     />
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button
-                      onClick={() => handleEdit(category)}
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      수정
-                    </button>
-                    <button
-                      onClick={() => handleDelete(category.id)}
-                      className="text-red-600 dark:text-red-400 hover:underline"
-                    >
-                      삭제
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {category.name}
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                    /{category.slug}
+                  </p>
+                </div>
+                {category.description && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    {category.description}
+                  </p>
+                )}
+                <div className="flex justify-end space-x-3 border-t border-gray-100 dark:border-gray-700 pt-2">
+                  <button
+                    onClick={() => handleEdit(category)}
+                    className="text-xs text-blue-600 dark:text-blue-400"
+                  >
+                    수정
+                  </button>
+                  <button
+                    onClick={() => handleDelete(category.id)}
+                    className="text-xs text-red-600 dark:text-red-400"
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

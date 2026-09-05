@@ -76,7 +76,7 @@ export default function NewPostPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+      <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-6 lg:mb-8">
         새 글 작성
       </h1>
 
@@ -170,7 +170,7 @@ export default function NewPostPage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => router.back()}
@@ -179,7 +179,7 @@ export default function NewPostPage() {
             취소
           </button>
           
-          <div className="space-x-3">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
             <button
               type="submit"
               onClick={() => setForm({ ...form, status: 'draft' })}

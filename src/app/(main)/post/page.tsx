@@ -110,8 +110,8 @@ function PostContent() {
   return (
     <article>
       <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        <div className="flex items-center text-gray-500 dark:text-gray-400 space-x-4">
+        <h1 className="text-2xl lg:text-4xl font-bold mb-4">{post.title}</h1>
+        <div className="flex flex-wrap items-center text-gray-500 dark:text-gray-400 space-x-4">
           {category && (
             <Link
               href={`/category?slug=${category.slug}`}
@@ -133,7 +133,7 @@ function PostContent() {
         )}
       </header>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 mb-8">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 lg:p-8 mb-8">
         <div className="prose dark:prose-invert max-w-none">
           {post.body.split('\n').map((paragraph, i) => (
             <p key={i} className="mb-4 whitespace-pre-wrap">
@@ -143,13 +143,13 @@ function PostContent() {
         </div>
       </div>
 
-      <section className="bg-white dark:bg-gray-800 rounded-lg shadow p-8">
-        <h2 className="text-2xl font-bold mb-6">
+      <section className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 lg:p-8">
+        <h2 className="text-xl lg:text-2xl font-bold mb-6">
           댓글 ({comments.length})
         </h2>
 
         <form onSubmit={handleCommentSubmit} className="mb-8 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 이름 *

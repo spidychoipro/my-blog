@@ -53,12 +53,35 @@ CREATE TABLE settings (
   blog_title TEXT DEFAULT 'My Blog',
   blog_description TEXT DEFAULT '개인 블로그',
   logo_url TEXT,
+  profile_image TEXT,
   primary_color TEXT DEFAULT '#3b82f6',
   secondary_color TEXT DEFAULT '#10b981',
+  accent_color TEXT DEFAULT '#f59e0b',
+  text_color TEXT DEFAULT '#1f2937',
+  background_color TEXT DEFAULT '#f9fafb',
+  card_background TEXT DEFAULT '#ffffff',
+  border_radius TEXT DEFAULT '0.5rem',
+  font_family TEXT DEFAULT 'system-ui, sans-serif',
   footer_text TEXT DEFAULT '© 2024 My Blog. All rights reserved.',
   posts_per_page INTEGER DEFAULT 10,
   enable_comments BOOLEAN DEFAULT true,
-  enable_dark_mode BOOLEAN DEFAULT true
+  enable_dark_mode BOOLEAN DEFAULT true,
+  header_html TEXT,
+  footer_html TEXT,
+  social_github TEXT,
+  social_twitter TEXT,
+  social_youtube TEXT,
+  social_instagram TEXT,
+  about_text TEXT,
+  hero_text TEXT,
+  hero_image TEXT,
+  custom_css TEXT,
+  hero_style TEXT DEFAULT 'centered',
+  post_card_style TEXT DEFAULT 'default',
+  show_profile_in_header BOOLEAN DEFAULT true,
+  show_tags BOOLEAN DEFAULT true,
+  show_category_badge BOOLEAN DEFAULT true,
+  enable_scroll_top BOOLEAN DEFAULT true
 );
 
 -- 인덱스 생성
@@ -110,3 +133,31 @@ CREATE POLICY "Admins can manage settings" ON settings
 -- 그 후에 이 SQL을 실행하여 profiles에 추가하세요:
 -- INSERT INTO profiles (id, email, name, role) 
 -- VALUES ('your-user-id', 'your-email@example.com', 'Admin', 'admin');
+
+-- ============================================================
+-- 기존 데이터베이스 업그레이드용 (이미 settings 테이블이 있는 경우)
+-- Supabase Dashboard > SQL Editor에서 아래를 실행하세요
+-- ============================================================
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS profile_image TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS accent_color TEXT DEFAULT '#f59e0b';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS text_color TEXT DEFAULT '#1f2937';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS background_color TEXT DEFAULT '#f9fafb';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS card_background TEXT DEFAULT '#ffffff';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS border_radius TEXT DEFAULT '0.5rem';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS font_family TEXT DEFAULT 'system-ui, sans-serif';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS header_html TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS footer_html TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS social_github TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS social_twitter TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS social_youtube TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS social_instagram TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS about_text TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS hero_text TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS hero_image TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS custom_css TEXT;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS hero_style TEXT DEFAULT 'centered';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS post_card_style TEXT DEFAULT 'default';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS show_profile_in_header BOOLEAN DEFAULT true;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS show_tags BOOLEAN DEFAULT true;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS show_category_badge BOOLEAN DEFAULT true;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS enable_scroll_top BOOLEAN DEFAULT true;

@@ -48,29 +48,56 @@ export default function HomePage() {
   const description = settings?.blog_description || process.env.NEXT_PUBLIC_BLOG_DESCRIPTION || 'Welcome to my blog';
   const heroText = settings?.hero_text;
   const primaryColor = settings?.primary_color || '#3b82f6';
+  const radius = settings?.border_radius || '0.5rem';
+  const cardBg = settings?.card_background || '#ffffff';
+  const heroStyle = settings?.hero_style || 'centered';
+  const cardStyle = settings?.post_card_style || 'default';
+
+  const heroAlign = heroStyle === 'left' ? 'text-left' : heroStyle === 'banner' ? 'text-center' : 'text-center';
 
   return (
     <div>
       {/* Hero Section */}
-      <section className="text-center py-12 mb-8">
-        {settings?.profile_image && (
-          <img
-            src={settings.profile_image}
-            alt={title}
-            className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-          />
+      <section
+        className={`py-12 mb-8 overflow-hidden relative ${heroAlign}`}
+        style={
+          heroStyle === 'banner'
+            ? {
+                backgroundImage: settings?.hero_image ? `url(${settings.hero_image})` : undefined,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: radius,
+              }
+            : { borderRadius: radius }
+        }
+      >
+        {heroStyle === 'banner' && settings?.hero_image && (
+          <div className="absolute inset-0 bg-black/40" />
         )}
-        <h1 className="text-4xl font-bold mb-4" style={{ color: primaryColor }}>
-          {title}
-        </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400">
-          {heroText || description}
-        </p>
-        {heroText && description && (
-          <p className="text-gray-500 dark:text-gray-400 mt-2">
-            {description}
-          </p>
-        )}
+        <div className="relative z-10">
+          <div className={heroStyle === 'left' ? 'px-4' : 'px-4'}>
+            {settings?.profile_image && (
+              <img
+                src={settings.profile_image}
+                alt={title}
+                className={`w-24 h-24 rounded-full mb-4 object-cover ${
+                  heroAlign === 'text-center' ? 'mx-auto' : ''
+                }`}
+              />
+            )}
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: primaryColor }}>
+              {title}
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400">
+              {heroText || description}
+            </p>
+            {heroText && description && (
+              <p className="text-gray-500 dark:text-gray-400 mt-2">
+                {description}
+              </p>
+            )}
+          </div>
+        </div>
       </section>
 
       {/* About Section */}
@@ -110,31 +137,36 @@ export default function HomePage() {
             아직 발행된 글이 없습니다.
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className={cardStyle === 'boxed' ? 'grid gap-4 sm:grid-cols-2' : 'space-y-6'}>
             {posts.map((post) => (
               <article
                 key={post.id}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-md transition-shadow"
+                className={
+                  cardStyle === 'minimal'
+                    ? 'border-b border-gray-200 dark:border-gray-700 py-5 first:pt-0'
+                    : 'rounded-lg shadow p-6 hover:shadow-md transition-shadow'
+                }
+                style={cardStyle !== 'minimal' ? { backgroundColor: cardBg, borderRadius: radius } : undefined}
               >
                 <Link href={`/post?slug=${post.slug}`}>
-                  <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400">
+                  <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400" style={{ color: settings?.text_color || undefined }}>
                     {post.title}
                   </h3>
                 </Link>
                 {post.excerpt && (
-                  <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                  <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ color: settings?.text_color || undefined }}>
                     {post.excerpt}
                   </p>
                 )}
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-4">
-                  {post.category_id && (
+                <div className="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400 gap-x-4 gap-y-1">
+                  {(settings?.show_category_badge ?? true) && post.category_id && (
                     <span className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">
                       {getCategoryName(post.category_id)}
                     </span>
                   )}
                   <time>{new Date(post.created_at).toLocaleDateString('ko-KR')}</time>
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="flex space-x-2">
+                  {(settings?.show_tags ?? true) && post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
                       {post.tags.slice(0, 3).map((tag, i) => (
                         <span key={i} className="text-blue-600 dark:text-blue-400">
                           #{tag}
