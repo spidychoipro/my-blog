@@ -50,9 +50,10 @@ export default function MainLayout({
       <div
         className="min-h-screen text-gray-900 dark:text-white transition-colors duration-300"
         style={{
-          backgroundColor: isDark ? undefined : settings?.background_color || '#f9fafb',
-          color: isDark ? undefined : settings?.text_color || '#1f2937',
+          backgroundColor: isDark ? '#111827' : settings?.background_color || '#f9fafb',
+          color: isDark ? '#f9fafb' : settings?.text_color || '#1f2937',
           fontFamily: settings?.font_family || 'system-ui, sans-serif',
+          colorScheme: isDark ? 'dark' : 'light',
         }}
       >
         {/* Custom Header HTML */}

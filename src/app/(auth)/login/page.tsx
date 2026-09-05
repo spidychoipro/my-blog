@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/stores/auth-store';
+import { useTheme } from '@/stores/theme-store';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, isLoading, error, clearError, user } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -28,15 +30,25 @@ export default function LoginPage() {
 
   if (user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-gray-500 dark:text-gray-400">관리자 페이지로 이동 중...</div>
+      <div className={`min-h-screen ${isDark ? 'dark' : ''}`}>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+          <div className="text-gray-500 dark:text-gray-400">관리자 페이지로 이동 중...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className={`min-h-screen ${isDark ? 'dark' : ''}`}>
+      <div className="relative min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <button
+          onClick={toggleTheme}
+          className="absolute top-4 right-4 p-2 rounded-md bg-white dark:bg-gray-800 shadow text-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+          aria-label="다크모드 토글"
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+        <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">
           관리자 로그인
         </h1>
@@ -94,6 +106,7 @@ export default function LoginPage() {
         <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
           관리자 계정으로 로그인하세요
         </p>
+      </div>
       </div>
     </div>
   );

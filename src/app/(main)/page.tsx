@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTheme } from '@/stores/theme-store';
 import { supabase, type Post, type Category, type BlogSettings } from '@/lib/supabase';
 
 export default function HomePage() {
+  const { isDark } = useTheme();
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [settings, setSettings] = useState<BlogSettings | null>(null);
@@ -146,15 +148,15 @@ export default function HomePage() {
                     ? 'border-b border-gray-200 dark:border-gray-700 py-5 first:pt-0'
                     : 'rounded-lg shadow p-6 hover:shadow-md transition-shadow'
                 }
-                style={cardStyle !== 'minimal' ? { backgroundColor: cardBg, borderRadius: radius } : undefined}
+                style={cardStyle !== 'minimal' ? { backgroundColor: isDark ? '#1f2937' : cardBg, borderRadius: radius } : undefined}
               >
                 <Link href={`/post?slug=${post.slug}`}>
-                  <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400" style={{ color: settings?.text_color || undefined }}>
+                  <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 dark:hover:text-blue-400" style={{ color: isDark ? undefined : settings?.text_color }}>
                     {post.title}
                   </h3>
                 </Link>
                 {post.excerpt && (
-                  <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ color: settings?.text_color || undefined }}>
+                  <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ color: isDark ? undefined : settings?.text_color }}>
                     {post.excerpt}
                   </p>
                 )}
