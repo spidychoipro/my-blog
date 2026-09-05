@@ -162,7 +162,7 @@ export default function PostsPage() {
                     </td>
                     <td className="px-6 py-4 text-right text-sm space-x-2">
                       <Link
-                        href={`/admin/posts/${post.id}/edit`}
+                        href={`/admin/posts/edit?id=${post.id}`}
                         className="text-blue-600 dark:text-blue-400 hover:underline"
                       >
                         수정
@@ -215,7 +215,7 @@ export default function PostsPage() {
                     {post.status === 'published' ? '초안으로' : '발행하기'}
                   </button>
                   <Link
-                    href={`/admin/posts/${post.id}/edit`}
+                    href={`/admin/posts/edit?id=${post.id}`}
                     className="text-xs text-blue-600 dark:text-blue-400"
                   >
                     수정
